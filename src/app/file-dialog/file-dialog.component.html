@@ -1,0 +1,10 @@
+
+<mat-form-field appearance="fill">
+    <mat-label>Selected XML file:</mat-label>
+    <input matInput disabled [value]="fileName?fileName:''">
+    <input type="file" style="display: none;" #fileInput>
+</mat-form-field>
+<br>
+<button mat-icon-button (click)="fileSelect(fileInput)" >
+    <mat-icon>file upload</mat-icon>
+</button>
