@@ -1,5 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { CoreComponent } from '../core/core.component'
 
 export interface DialogData {
   file: string;
@@ -18,6 +19,7 @@ export class FileDialogComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<FileDialogComponent>,
+    public xmlReader: CoreComponent,
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
   ) {}
 
@@ -32,13 +34,13 @@ export class FileDialogComponent implements OnInit {
 
     this.file = fileInput.files?.item(0);
     this.fileName = fileInput.files?.item(0)?.name;
-    
+
     console.log("isXMLext?", this.validateXmlFileExt(this.fileName));
 
     let fileReader = new FileReader();
     if(this.file?.arrayBuffer())
       fileReader.readAsArrayBuffer(this.file);
-        
+
     fileReader.onload = (e) => {
       let arrayBuffer = fileReader.result;
       if (arrayBuffer instanceof ArrayBuffer){
@@ -46,7 +48,9 @@ export class FileDialogComponent implements OnInit {
         this.fileContent = new TextDecoder("utf-8").decode(data);
         //fileContent = String.fromCharCode.apply(String, data);
       }
-      console.log(e,this.fileContent);
+      //console.log(e,this.fileContent);
+      this.xmlReader.loadXml(this.fileContent);
+
     }
   }
 

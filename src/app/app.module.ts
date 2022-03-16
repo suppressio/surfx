@@ -6,17 +6,18 @@ import { AppComponent } from './app.component';
 import { DomNavComponent } from './dom-nav/dom-nav.component';
 import { MainGridComponent } from './main-grid/main-grid.component';
 
-import { MatSidenavModule }  from '@angular/material/sidenav'; 
+import { MatSidenavModule }  from '@angular/material/sidenav';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatTreeModule } from '@angular/material/tree'; 
-import { MatFormFieldModule } from '@angular/material/form-field'; 
+import { MatTreeModule } from '@angular/material/tree';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatIconModule } from '@angular/material/icon';
-import { MatButtonModule } from '@angular/material/button'; 
-import { MatDialogModule } from '@angular/material/dialog'; 
-import { MatTableModule } from '@angular/material/table'; 
+import { MatButtonModule } from '@angular/material/button';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatTableModule } from '@angular/material/table';
 import { FileDialogComponent } from './file-dialog/file-dialog.component';
+import { CoreComponent } from './core/core.component';
 
 
 @NgModule({
@@ -24,7 +25,8 @@ import { FileDialogComponent } from './file-dialog/file-dialog.component';
     AppComponent,
     DomNavComponent,
     MainGridComponent,
-    FileDialogComponent
+    FileDialogComponent,
+    CoreComponent
   ],
   imports: [
     BrowserModule,
@@ -40,7 +42,9 @@ import { FileDialogComponent } from './file-dialog/file-dialog.component';
     MatDialogModule,
     MatTableModule
   ],
-  providers: [],
+  providers: [
+    CoreComponent
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
