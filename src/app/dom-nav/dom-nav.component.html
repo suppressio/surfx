@@ -39,7 +39,10 @@
       <button mat-icon-button *ngIf="!drawer.opened" (click)="drawer.toggle()" class="toggle-sidenav">
         <mat-icon>menu icon</mat-icon>
       </button>
-      <app-main-grid style="width:100%; height: 100%;"></app-main-grid>
+      <app-main-grid 
+        style="width:100%; height: 100%;"
+        [data]="data">
+      </app-main-grid>
     </div>
   
   </mat-drawer-container>

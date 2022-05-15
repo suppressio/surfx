@@ -29,19 +29,22 @@ export class MainGridComponent implements OnInit {
 
 
   ngOnInit(): void {
+    if (!this.data)
+      this.data = [];
     this.initData();
   }
 
   initData(){
     //let d= data[0];
-    this.data.forEach((d:any)=>{
-      Object.keys(d).forEach(k=>{
-        if(this.displayedColumns.indexOf(k)<0)
-          this.displayedColumns.push(k);
+    if (this.data)
+      this.data.forEach((d:any)=>{
+        Object.keys(d).forEach(k=>{
+          if(this.displayedColumns.indexOf(k)<0)
+            this.displayedColumns.push(k);
+        });
       });
-    });
-    console.log("displayedColumns:", this.displayedColumns);
-    this.dataSource = this.data;
+      console.log("displayedColumns:", this.displayedColumns);
+      this.dataSource = this.data;
   }
 
 

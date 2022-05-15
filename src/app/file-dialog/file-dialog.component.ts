@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, Output } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { CoreComponent } from '../core/core.component'
 
@@ -12,6 +12,7 @@ export interface DialogData {
   styleUrls: ['./file-dialog.component.scss']
 })
 export class FileDialogComponent implements OnInit {
+  @Output() outData:any;
 
   file: File | null | undefined;
   fileName: string | undefined;
@@ -48,8 +49,9 @@ export class FileDialogComponent implements OnInit {
         this.fileContent = new TextDecoder("utf-8").decode(data);
         //fileContent = String.fromCharCode.apply(String, data);
       }
+      
       //console.log(e,this.fileContent);
-      this.xmlReader.loadXml(this.fileContent);
+      this.outData = this.xmlReader.loadXml(this.fileContent);
 
     }
   }

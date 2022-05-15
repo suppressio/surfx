@@ -133,6 +133,8 @@ export class DomNavComponent implements OnInit {
 
   xmlFile:string | undefined;
 
+  data:any;
+
   constructor(
     private _database: ChecklistDatabase,
     public dialog: MatDialog
@@ -282,6 +284,10 @@ export class DomNavComponent implements OnInit {
       width: '300px',
       data: {file: this.xmlFile},
     });
+  }
+
+  selectedFile(){
+    this.data = this.xmlFile;
   }
 }
 
