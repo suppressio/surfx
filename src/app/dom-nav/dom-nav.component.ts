@@ -284,6 +284,8 @@ export class DomNavComponent implements OnInit {
       width: '300px',
       data: {file: this.xmlFile},
     });
+
+    console.log("dialogRef", dialogRef);
   }
 
   selectedFile(){

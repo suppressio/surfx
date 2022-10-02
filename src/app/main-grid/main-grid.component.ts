@@ -35,7 +35,11 @@ export class MainGridComponent implements OnInit {
   }
 
   initData(){
-    //let d= data[0];
+    console.log("data:", this.data);
+    this.displayColums();
+  }
+
+  displayColums(){
     if (this.data)
       this.data.forEach((d:any)=>{
         Object.keys(d).forEach(k=>{
@@ -43,9 +47,9 @@ export class MainGridComponent implements OnInit {
             this.displayedColumns.push(k);
         });
       });
-      console.log("displayedColumns:", this.displayedColumns);
-      this.dataSource = this.data;
+      
+    console.log("displayedColumns:", this.displayedColumns);
+    this.dataSource = this.data;
   }
-
 
 }

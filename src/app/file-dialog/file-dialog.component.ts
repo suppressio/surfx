@@ -12,7 +12,7 @@ export interface DialogData {
   styleUrls: ['./file-dialog.component.scss']
 })
 export class FileDialogComponent implements OnInit {
-  @Output() outData:any;
+  // @Output() outData:any;
 
   file: File | null | undefined;
   fileName: string | undefined;
@@ -21,7 +21,7 @@ export class FileDialogComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<FileDialogComponent>,
     public xmlReader: CoreComponent,
-    @Inject(MAT_DIALOG_DATA) public data: DialogData,
+    @Inject(MAT_DIALOG_DATA) public outData: DialogData,
   ) {}
 
   ngOnInit(): void { }
@@ -50,9 +50,10 @@ export class FileDialogComponent implements OnInit {
         //fileContent = String.fromCharCode.apply(String, data);
       }
       
-      //console.log(e,this.fileContent);
-      this.outData = this.xmlReader.loadXml(this.fileContent);
+      if(this.fileContent)
+        this.outData = this.xmlReader.loadXml(this.fileContent);
 
+      console.log("dialog outdata:",this.outData);
     }
   }
 

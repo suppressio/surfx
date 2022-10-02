@@ -21,18 +21,13 @@ export class CoreComponent {
       });
       const xml = parser.parse(file);
 
-      if (xml && xml.channel.item.length) {
-        const episodes = xml.channel.item.map((data:any) => {
-          console.log(data);
-        });
-    
-        if (Array.isArray(episodes) && episodes.length !== 0) {
-          // Successful
-          return { episodes };
-        }
-      }
-    }
+      // if (xml && xml.settings.menu.menuGroup.length) {
+      //   const menuElems = xml.settings.menu.menuGroup.map((data:any) => {
+      //     console.log(data);
 
-    return null;
+      //     return data;
+      //   });
+      return xml;
+    }
   }
 }
