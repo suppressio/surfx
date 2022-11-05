@@ -19,6 +19,7 @@ import { MatTableModule } from '@angular/material/table';
 import { FileDialogComponent } from './file-dialog/file-dialog.component';
 import { CoreComponent } from './core/core.component';
 
+import { FileDialogService } from './file-dialog/file-dialog.service';
 
 @NgModule({
   declarations: [
@@ -43,7 +44,8 @@ import { CoreComponent } from './core/core.component';
     MatTableModule
   ],
   providers: [
-    CoreComponent
+    CoreComponent,
+    FileDialogService
   ],
   bootstrap: [AppComponent]
 })

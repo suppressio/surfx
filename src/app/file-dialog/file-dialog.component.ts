@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, Output } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { CoreComponent } from '../core/core.component'
 
@@ -38,18 +38,18 @@ export class FileDialogComponent implements OnInit {
 
     console.log("isXMLext?", this.validateXmlFileExt(this.fileName));
 
-    let fileReader = new FileReader();
+    const fileReader = new FileReader();
     if(this.file?.arrayBuffer())
       fileReader.readAsArrayBuffer(this.file);
 
-    fileReader.onload = (e) => {
-      let arrayBuffer = fileReader.result;
+    fileReader.onload = () => {
+      const arrayBuffer = fileReader.result;
       if (arrayBuffer instanceof ArrayBuffer){
         var data = new Uint8Array(arrayBuffer);
         this.fileContent = new TextDecoder("utf-8").decode(data);
         //fileContent = String.fromCharCode.apply(String, data);
       }
-      
+
       if(this.fileContent)
         this.outData = this.xmlReader.loadXml(this.fileContent);
 
@@ -57,7 +57,7 @@ export class FileDialogComponent implements OnInit {
     }
   }
 
-  validateXmlFileExt(name: String|undefined):boolean {
+  private validateXmlFileExt(name: String|undefined):boolean {
     if (name)
       return (name.substring(name.lastIndexOf('.')+1).toLowerCase() == 'xml');
     return false;

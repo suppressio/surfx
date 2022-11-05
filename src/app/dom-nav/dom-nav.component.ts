@@ -1,11 +1,10 @@
 import { SelectionModel } from '@angular/cdk/collections';
 import { FlatTreeControl } from '@angular/cdk/tree';
-import { Component, Inject, Injectable, OnInit } from '@angular/core';
+import { Component, Injectable, OnInit, OnDestroy } from '@angular/core';
 import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree';
-import { MatDialog } from '@angular/material/dialog';
-import { BehaviorSubject } from 'rxjs';
-import { FileDialogComponent } from '../file-dialog/file-dialog.component';
+import { BehaviorSubject, Subscription } from 'rxjs';
 //import xml2js from 'xml2js';
+import { FileDialogService } from '../file-dialog/file-dialog.service';
 
 /**
  * Node for to-do item
@@ -110,7 +109,8 @@ export class ChecklistDatabase {
   styleUrls: ['./dom-nav.component.scss'],
   providers: [ChecklistDatabase],
 })
-export class DomNavComponent implements OnInit {
+export class DomNavComponent implements OnInit, OnDestroy {
+  private subs = new Subscription();
 
   /** Map from flat node to nested node. This helps us finding the nested node to be modified */
   flatNodeMap = new Map<ItemFlatNode, ItemNode>();
@@ -137,7 +137,7 @@ export class DomNavComponent implements OnInit {
 
   constructor(
     private _database: ChecklistDatabase,
-    public dialog: MatDialog
+    private fileSelect: FileDialogService
     ) {
     this.treeFlattener = new MatTreeFlattener(
       this.transformer,
@@ -148,15 +148,18 @@ export class DomNavComponent implements OnInit {
     this.treeControl = new FlatTreeControl<ItemFlatNode>(this.getLevel, this.isExpandable);
     this.dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
 
+    this.subs.add(
     _database.dataChange.subscribe(data => {
       this.dataSource.data = data;
-    });
+    }));
   }
 
   ngOnInit(): void {
-    if (!this.xmlFile) {
-      this.openDialog();
-    }
+    if (!this.xmlFile){
+      this.fileSelect.openDialog();
+      // this.fileSelect.getXmlFileObs.subscribe(
+      //   (file) => this.xmlFile = file);
+      }
   }
 
   getLevel = (node: ItemFlatNode) => node.level;
@@ -279,18 +282,11 @@ export class DomNavComponent implements OnInit {
     this._database.updateItem(nestedNode!, itemValue);
   }
 
-  openDialog(): void {
-    const dialogRef = this.dialog.open(FileDialogComponent, {
-      width: '300px',
-      data: {file: this.xmlFile},
-    });
-
-    console.log("dialogRef", dialogRef);
-  }
-
   selectedFile(){
     this.data = this.xmlFile;
   }
+
+  ngOnDestroy():void {
+    this.subs.unsubscribe();
+  }
 }
-
-
