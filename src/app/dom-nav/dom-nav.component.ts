@@ -1,42 +1,10 @@
 import { SelectionModel } from '@angular/cdk/collections';
 import { FlatTreeControl } from '@angular/cdk/tree';
-import { Component, Injectable, OnInit, OnDestroy } from '@angular/core';
+import { Component, Injectable, OnInit, OnDestroy, Input, OnChanges } from '@angular/core';
 import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree';
 import { BehaviorSubject, Subscription } from 'rxjs';
-//import xml2js from 'xml2js';
-import { FileDialogService } from '../file-dialog/file-dialog.service';
-
-/**
- * Node for to-do item
- */
-export class ItemNode {
-  children: ItemNode[] = [];
-  item!: string;
-}
-
-/** Flat to-do item node with expandable and level information */
-export class ItemFlatNode {
-  item!: string;
-  level!: number;
-  expandable: boolean = false;
-}
-
-/**
- * The Json object for to-do list data.
- */
-const TREE_DATA = {
-  Groceries: {
-    'Almond Meal flour': null,
-    'Organic eggs': null,
-    'Protein Powder': null,
-    Fruits: {
-      Apple: null,
-      Berries: ['Blueberry', 'Raspberry'],
-      Orange: null,
-    },
-  },
-  Reminders: ['Cook dinner', 'Read the Material Design spec', 'Upgrade Application to Angular'],
-};
+import { environment } from 'src/environments/environment';
+import { DialogData, ItemFlatNode, ItemNode } from '../model/models';
 
 /**
  * Checklist database, it can build a tree structured Json object.
@@ -51,23 +19,25 @@ export class ChecklistDatabase {
     return this.dataChange.value;
   }
 
-  constructor() {
-    this.initialize();
+  set data(newData: ItemNode[]){
+    this.initialize(newData, 0);
   }
 
-  initialize() {
-    // Build the tree nodes from Json object. The result is a list of `TodoItemNode` with nested
-    //     file node as children.
-    const data = this.buildFileTree(TREE_DATA, 0);
+  constructor() {
+    this.initialize(environment.demo_todo, 0);
+  }
+
+  initialize(obj: {[key: string]: any}, level: number) {
+    // Build the tree nodes from Json object. 
+    // The result is a list of `TodoItemNode` with nested file node as children.
+    const data = this.buildFileTree(obj, level);
 
     // Notify the change.
     this.dataChange.next(data);
   }
 
-  /**
-   * Build the file structure tree. The `value` is the Json object, or a sub-tree of a Json object.
-   * The return value is the list of `TodoItemNode`.
-   */
+  /** Build the file structure tree. The `value` is the Json object, or a sub-tree of a Json object.
+   * The return value is the list of `TodoItemNode`. */
   buildFileTree(obj: {[key: string]: any}, level: number): ItemNode[] {
     return Object.keys(obj).reduce<ItemNode[]>((accumulator, key) => {
       const value = obj[key];
@@ -110,6 +80,7 @@ export class ChecklistDatabase {
   providers: [ChecklistDatabase],
 })
 export class DomNavComponent implements OnInit, OnDestroy {
+  @Input() data: DialogData;
   private subs = new Subscription();
 
   /** Map from flat node to nested node. This helps us finding the nested node to be modified */
@@ -131,36 +102,26 @@ export class DomNavComponent implements OnInit, OnDestroy {
   /** The selection for checklist */
   checklistSelection = new SelectionModel<ItemFlatNode>(true /* multiple */);
 
-  xmlFile:string | undefined;
-
-  data:any;
-
   constructor(
-    private _database: ChecklistDatabase,
-    private fileSelect: FileDialogService
+    private _database: ChecklistDatabase
     ) {
-    this.treeFlattener = new MatTreeFlattener(
-      this.transformer,
-      this.getLevel,
-      this.isExpandable,
-      this.getChildren,
-    );
-    this.treeControl = new FlatTreeControl<ItemFlatNode>(this.getLevel, this.isExpandable);
-    this.dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
+      this.treeFlattener = new MatTreeFlattener(
+        this.transformer,
+        this.getLevel,
+        this.isExpandable,
+        this.getChildren,
+      );
+      this.treeControl = new FlatTreeControl<ItemFlatNode>(this.getLevel, this.isExpandable);
+      this.dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
 
-    this.subs.add(
-    _database.dataChange.subscribe(data => {
-      this.dataSource.data = data;
-    }));
+      this.data = {fileContent:undefined};
+
+      this.subs.add(
+        _database.dataChange.subscribe(data =>
+          this.dataSource.data = data));
   }
 
-  ngOnInit(): void {
-    if (!this.xmlFile){
-      this.fileSelect.openDialog();
-      // this.fileSelect.getXmlFileObs.subscribe(
-      //   (file) => this.xmlFile = file);
-      }
-  }
+  ngOnInit(): void { }
 
   getLevel = (node: ItemFlatNode) => node.level;
 
@@ -172,9 +133,7 @@ export class DomNavComponent implements OnInit, OnDestroy {
 
   hasNoContent = (_: number, _nodeData: ItemFlatNode) => _nodeData.item === '';
 
-  /**
-   * Transformer to convert nested node to flat node. Record the nodes in maps for later use.
-   */
+  /** Transformer to convert nested node to flat node. Record the nodes in maps for later use. */
   transformer = (node: ItemNode, level: number) => {
     const existingNode = this.nestedNodeMap.get(node);
     const flatNode =
@@ -253,12 +212,10 @@ export class DomNavComponent implements OnInit, OnDestroy {
   getParentNode(node: ItemFlatNode): ItemFlatNode | null {
     const currentLevel = this.getLevel(node);
 
-    if (currentLevel < 1) {
+    if (currentLevel < 1) 
       return null;
-    }
 
     const startIndex = this.treeControl.dataNodes.indexOf(node) - 1;
-
     for (let i = startIndex; i >= 0; i--) {
       const currentNode = this.treeControl.dataNodes[i];
 
@@ -280,10 +237,6 @@ export class DomNavComponent implements OnInit, OnDestroy {
   saveNode(node: ItemFlatNode, itemValue: string) {
     const nestedNode = this.flatNodeMap.get(node);
     this._database.updateItem(nestedNode!, itemValue);
-  }
-
-  selectedFile(){
-    this.data = this.xmlFile;
   }
 
   ngOnDestroy():void {

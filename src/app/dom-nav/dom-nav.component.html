@@ -1,50 +1,27 @@
-<mat-drawer-container class="container" autosize>
-    <mat-drawer #drawer class="sidenav" mode="side">
-      <button mat-icon-button *ngIf="drawer.opened" (click)="drawer.toggle()" class="toggle-sidenav">
-        <mat-icon>menu icon</mat-icon>
-      </button>
-      <p style="position:absolute; top:15px; left:50px;">DOM nav.</p>
-      <p>&nbsp;</p>
-      <mat-tree 
-        [dataSource]="dataSource" 
-        [treeControl]="treeControl">
-        <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle matTreeNodePadding>
-          <button mat-icon-button disabled></button>{{node.item}}
-        </mat-tree-node>
-      
-        <mat-tree-node *matTreeNodeDef="let node; when: hasNoContent" matTreeNodePadding>
-          <button mat-icon-button disabled></button>
-          <mat-form-field appearance="fill">
-            <mat-label>New item...</mat-label>
-            <input matInput #itemValue placeholder="Ex. Lettuce">
-          </mat-form-field>
-          <button mat-button (click)="saveNode(node, itemValue.value)">Save</button>
-        </mat-tree-node>
-      
-        <mat-tree-node *matTreeNodeDef="let node; when: hasChild" matTreeNodePadding>
-          <button mat-icon-button matTreeNodeToggle
-                  [attr.aria-label]="'Toggle ' + node.item">
-            <mat-icon class="mat-icon-rtl-mirror">
-              {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
-            </mat-icon>
-          </button>
-            {{node.item}}
-          <button mat-icon-button (click)="addNewItem(node)"><mat-icon>add</mat-icon></button>
-        </mat-tree-node>
-      </mat-tree>
-      
-    </mat-drawer>
-  
-    <div class="sidenav-content">
-      <button mat-icon-button *ngIf="!drawer.opened" (click)="drawer.toggle()" class="toggle-sidenav">
-        <mat-icon>menu icon</mat-icon>
-      </button>
-      <app-main-grid 
-        style="width:100%; height: 100%;"
-        [data]="data">
-      </app-main-grid>
-    </div>
-  
-  </mat-drawer-container>
-  
-  
+<mat-tree 
+  [dataSource]="dataSource" 
+  [treeControl]="treeControl">
+  <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle matTreeNodePadding>
+    <button mat-icon-button disabled></button>{{node.item}}
+  </mat-tree-node>
+
+  <mat-tree-node *matTreeNodeDef="let node; when: hasNoContent" matTreeNodePadding>
+    <button mat-icon-button disabled></button>
+    <mat-form-field appearance="fill">
+      <mat-label>New item...</mat-label>
+      <input matInput #itemValue placeholder="Ex. Lettuce">
+    </mat-form-field>
+    <button mat-button (click)="saveNode(node, itemValue.value)">Save</button>
+  </mat-tree-node>
+
+  <mat-tree-node *matTreeNodeDef="let node; when: hasChild" matTreeNodePadding>
+    <button mat-icon-button matTreeNodeToggle
+            [attr.aria-label]="'Toggle ' + node.item">
+      <mat-icon class="mat-icon-rtl-mirror">
+        {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+      </mat-icon>
+    </button>
+      {{node.item}}
+    <button mat-icon-button (click)="addNewItem(node)"><mat-icon>add</mat-icon></button>
+  </mat-tree-node>
+</mat-tree>

@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { XMLParser, XMLBuilder, XMLValidator } from 'fast-xml-parser';
+import { Component } from '@angular/core';
+import { DialogData } from '../model/models';
+import { FileDialogService } from '../services/file-dialog.service';
 
 @Component({
   selector: 'app-core',
@@ -7,27 +8,33 @@ import { XMLParser, XMLBuilder, XMLValidator } from 'fast-xml-parser';
   styleUrls: ['./core.component.scss']
 })
 export class CoreComponent {
-  xml = `<xml></xml>`;
-  json = {};
+  data: DialogData;
+  constructor(
+    private fileSelect: FileDialogService
+    ) {
+      this.data = {fileContent:undefined};
+    }
 
-  constructor( ) {
+  openFileDialog(): void {
+    this.fileSelect.openDialog();
+    this.fileSelect.getXmlFileObs().subscribe(
+      (data:DialogData) => this.data = data);
   }
 
-  loadXml(file:string|undefined): any {
-    if (file){
-      const parser = new XMLParser({
-        ignoreAttributes: false,
-        attributeNamePrefix: '',
+  // TODO
+  private loadJson(): any {
+    throw new Error("Unimplemented");
+  }
+
+  // TODO
+  private modelXml(xml:any) {
+    if (xml && xml.settings.menu.menuGroup.length) {
+      const menuElems = xml.settings.menu.menuGroup.map(
+        (data:any) => {
+        console.log("core",data);
+        return data;
       });
-      const xml = parser.parse(file);
-
-      // if (xml && xml.settings.menu.menuGroup.length) {
-      //   const menuElems = xml.settings.menu.menuGroup.map((data:any) => {
-      //     console.log(data);
-
-      //     return data;
-      //   });
-      return xml;
     }
+    return xml;
   }
 }

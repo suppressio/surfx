@@ -1,66 +1,63 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { CoreComponent } from '../core/core.component'
-
-export interface DialogData {
-  file: string;
-}
+import { DialogData } from '../model/models';
+import { FileDialogService } from '../services/file-dialog.service';
 
 @Component({
   selector: 'app-file-dialog',
   templateUrl: './file-dialog.component.html',
   styleUrls: ['./file-dialog.component.scss']
 })
-export class FileDialogComponent implements OnInit {
-  // @Output() outData:any;
+export class FileDialogComponent {
+  private fileReader = new FileReader();
 
   file: File | null | undefined;
   fileName: string | undefined;
-  fileContent: string | undefined;
 
   constructor(
     public dialogRef: MatDialogRef<FileDialogComponent>,
-    public xmlReader: CoreComponent,
+    public fileDialogReader: FileDialogService,
     @Inject(MAT_DIALOG_DATA) public outData: DialogData,
   ) {}
 
-  ngOnInit(): void { }
-
-  onNoClick(): void {
-    this.dialogRef.close();
-  }
-
-  fileSelect(fileInput: HTMLInputElement){
-    fileInput.click();
-
+  onSelectedFile(fileInput: HTMLInputElement): void{
     this.file = fileInput.files?.item(0);
     this.fileName = fileInput.files?.item(0)?.name;
 
-    console.log("isXMLext?", this.validateXmlFileExt(this.fileName));
+    if(this.file && this.validateXmlFileExt(this.fileName))
+      this.readXmlFile(this.file);
+  }
 
-    const fileReader = new FileReader();
-    if(this.file?.arrayBuffer())
-      fileReader.readAsArrayBuffer(this.file);
+  private readXmlFile(file:File): void{
+    this.fileReader.readAsArrayBuffer(file);
 
-    fileReader.onload = () => {
-      const arrayBuffer = fileReader.result;
+    this.fileReader.onload = () => {
+      const arrayBuffer = this.fileReader.result;
       if (arrayBuffer instanceof ArrayBuffer){
-        var data = new Uint8Array(arrayBuffer);
-        this.fileContent = new TextDecoder("utf-8").decode(data);
+        const fileContent = new TextDecoder("utf-8").decode(new Uint8Array(arrayBuffer));
         //fileContent = String.fromCharCode.apply(String, data);
+
+        if (fileContent){
+          const parsedData = this.parseXml(fileContent);
+          this.loadData({fileContent:parsedData });
+        }
       }
-
-      if(this.fileContent)
-        this.outData = this.xmlReader.loadXml(this.fileContent);
-
-      console.log("dialog outdata:",this.outData);
     }
   }
 
-  private validateXmlFileExt(name: String|undefined):boolean {
-    if (name)
-      return (name.substring(name.lastIndexOf('.')+1).toLowerCase() == 'xml');
-    return false;
+  private validateXmlFileExt(name: String|undefined): boolean{
+    return name? (name.substring(name.lastIndexOf('.')+1).toLowerCase() == 'xml'): false;
   }
 
+  private parseXml(fileContent:any){
+    return this.fileDialogReader.parseXml(fileContent);
+  }
+
+  private loadData(data: DialogData){
+    this.fileDialogReader.setXmlFile(data);
+  }
+
+  close(): void {
+    this.dialogRef.close();
+  }
 }

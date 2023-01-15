@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { DomNavComponent } from './dom-nav/dom-nav.component';
+import { CoreComponent } from './core/core.component';
 
 const routes: Routes = [
-  { path: 'main', component: DomNavComponent },
+  { path: 'main', component: CoreComponent },
   { path: '',   redirectTo: '/main', pathMatch: 'full' },
 ];
 
