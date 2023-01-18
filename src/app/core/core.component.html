@@ -11,9 +11,13 @@
       <p>
         &nbsp;
         <br>
+        <input type="file" 
+            style="display: none;" 
+            (change)="onSelectedFile(fileInput)" 
+            #fileInput>
         <button mat-icon-button 
-          (click)="openFileDialog()">
-          <mat-icon>attach_file</mat-icon> Open file...
+          (click)="fileInput.click()">
+          <mat-icon>file_upload</mat-icon> Open file...
         </button>
       </p>
 

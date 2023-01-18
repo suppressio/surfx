@@ -1,19 +1,19 @@
-
-<mat-form-field appearance="fill">
-    <mat-label>Selected XML file:</mat-label>
-    <input matInput disabled [value]="fileName?fileName:''">
-    <input 
-        type="file" 
-        style="display: none;" 
-        (change)="onSelectedFile(fileInput)" 
-        #fileInput>
-</mat-form-field>
-<br>
-<button mat-icon-button 
-    (click)="fileInput.click()">
-    <mat-icon>file upload</mat-icon>
-</button>
-<button mat-icon-button 
-    (click)="close()">
-    <mat-icon>close</mat-icon>
-</button>
+<div style="position: relative;">
+    <button mat-icon-button
+        style="position: absolute; top: -30px; right: 0px;"
+        (click)="close()">
+        <mat-icon>close</mat-icon>
+    </button>
+    <mat-form-field appearance="fill">
+        <mat-label>Selected XML file:</mat-label>
+        <input matInput disabled [value]="fileName?fileName:''">
+        <input type="file" 
+            style="display: none;" 
+            (change)="onSelectedFile(fileInput)" 
+            #fileInput>
+    </mat-form-field>
+    <button mat-icon-button 
+        (click)="fileInput.click()">
+        <mat-icon>file_upload</mat-icon>
+    </button>
+</div>

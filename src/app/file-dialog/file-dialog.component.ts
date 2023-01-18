@@ -1,7 +1,7 @@
 import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { DialogData } from '../model/models';
-import { FileDialogService } from '../services/file-dialog.service';
+import { FileData } from '../model/models';
+import { FileIOService } from '../services/file-io.service';
 
 @Component({
   selector: 'app-file-dialog',
@@ -16,8 +16,8 @@ export class FileDialogComponent {
 
   constructor(
     public dialogRef: MatDialogRef<FileDialogComponent>,
-    public fileDialogReader: FileDialogService,
-    @Inject(MAT_DIALOG_DATA) public outData: DialogData,
+    public fileDialogReader: FileIOService,
+    @Inject(MAT_DIALOG_DATA) public outData: FileData,
   ) {}
 
   onSelectedFile(fileInput: HTMLInputElement): void{
@@ -39,7 +39,7 @@ export class FileDialogComponent {
 
         if (fileContent){
           const parsedData = this.parseXml(fileContent);
-          this.loadData({fileContent:parsedData });
+          this.loadData({fileContent:parsedData,fileName:undefined});
         }
       }
     }
@@ -53,7 +53,7 @@ export class FileDialogComponent {
     return this.fileDialogReader.parseXml(fileContent);
   }
 
-  private loadData(data: DialogData){
+  private loadData(data: FileData){
     this.fileDialogReader.setXmlFile(data);
   }
 

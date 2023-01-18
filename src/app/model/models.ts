@@ -1,6 +1,7 @@
 
-export interface DialogData {
+export interface FileData {
     fileContent: any|undefined,
+    fileName: string|undefined,
     error?: string
 }
 

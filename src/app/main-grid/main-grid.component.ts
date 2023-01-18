@@ -1,5 +1,5 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { DialogData } from '../model/models';
+import { FileData } from '../model/models';
 
 @Component({
   selector: 'app-main-grid',
@@ -7,12 +7,12 @@ import { DialogData } from '../model/models';
   styleUrls: ['./main-grid.component.scss']
 })
 export class MainGridComponent implements OnInit, OnChanges{
-  @Input() data: DialogData;
+  @Input() data: FileData;
   displayedColumns: string[];
   dataSource:any;
 
   constructor() {
-    this.data = {fileContent:undefined};
+    this.data = {fileContent:undefined, fileName:undefined};
     this.displayedColumns = [];
     this.dataSource = undefined;
   }
@@ -26,7 +26,7 @@ export class MainGridComponent implements OnInit, OnChanges{
   }
 
   private flushData(){
-    this.data = {fileContent:undefined};
+    this.data = {fileContent:undefined,fileName:undefined};
     this.displayedColumns = [];
     this.dataSource = undefined;
   }

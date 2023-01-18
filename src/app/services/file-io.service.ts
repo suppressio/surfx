@@ -1,15 +1,11 @@
-
 import { Injectable } from '@angular/core';
-import { FileDialogComponent } from '../file-dialog/file-dialog.component';
-import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { BehaviorSubject } from 'rxjs';
-import { DialogData } from '../model/models';
+import { FileData } from '../model/models';
 import { XMLParser, XMLValidator, XMLBuilder } from 'fast-xml-parser';
 
 @Injectable()
-export class FileDialogService{
-  private xmlFileTx:string = "";
-  private xmlFileObs = new BehaviorSubject<DialogData>({fileContent:undefined});
+export class FileIOService{
+  private xmlFileObs = new BehaviorSubject<FileData>({fileContent:undefined,fileName:undefined});
 
   private xml = `<xml></xml>`;
   private json = {};
@@ -19,22 +15,22 @@ export class FileDialogService{
     attributeNamePrefix: '',
   });
 
-  constructor(private dialog: MatDialog){ }
+  constructor(){ }
 
-  public openDialog(): void {
-    const config: MatDialogConfig = {
-      width: '300px',
-      data: {file: this.xmlFileTx},
-    };
+  // public openDialog(): void {
+  //   const config: MatDialogConfig = {
+  //     width: '300px',
+  //     data: {file: this.xmlFileTx},
+  //   };
 
-    this.dialog.open(FileDialogComponent, config);
-  }
+  //   this.dialog.open(FileDialogComponent, config);
+  // }
 
-  getXmlFileObs(): BehaviorSubject<DialogData>{
+  getXmlFileObs(): BehaviorSubject<FileData>{
     return this.xmlFileObs;
   }
 
-  setXmlFile(xmlFileTx:DialogData): void{
+  setXmlFile(xmlFileTx:FileData){
     this.xmlFileObs.next(xmlFileTx);
   }
   

@@ -1,10 +1,10 @@
 import { SelectionModel } from '@angular/cdk/collections';
 import { FlatTreeControl } from '@angular/cdk/tree';
-import { Component, Injectable, OnInit, OnDestroy, Input, OnChanges } from '@angular/core';
+import { Component, Injectable, OnInit, OnDestroy, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { DialogData, ItemFlatNode, ItemNode } from '../model/models';
+import { FileData, ItemFlatNode, ItemNode } from '../model/models';
 
 /**
  * Checklist database, it can build a tree structured Json object.
@@ -23,9 +23,7 @@ export class ChecklistDatabase {
     this.initialize(newData, 0);
   }
 
-  constructor() {
-    this.initialize(environment.demo_todo, 0);
-  }
+  constructor() { }
 
   initialize(obj: {[key: string]: any}, level: number) {
     // Build the tree nodes from Json object. 
@@ -79,8 +77,8 @@ export class ChecklistDatabase {
   styleUrls: ['./dom-nav.component.scss'],
   providers: [ChecklistDatabase],
 })
-export class DomNavComponent implements OnInit, OnDestroy {
-  @Input() data: DialogData;
+export class DomNavComponent implements OnInit, OnChanges, OnDestroy {
+  @Input() data: FileData;
   private subs = new Subscription();
 
   /** Map from flat node to nested node. This helps us finding the nested node to be modified */
@@ -114,14 +112,21 @@ export class DomNavComponent implements OnInit, OnDestroy {
       this.treeControl = new FlatTreeControl<ItemFlatNode>(this.getLevel, this.isExpandable);
       this.dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
 
-      this.data = {fileContent:undefined};
+      this.data = {fileContent:undefined,fileName:undefined};
 
       this.subs.add(
-        _database.dataChange.subscribe(data =>
-          this.dataSource.data = data));
+        _database.dataChange.subscribe(data => 
+          this.dataSource.data = data
+        ));
   }
 
   ngOnInit(): void { }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    console.log("dom-nav", this.data);
+    if (this.data.fileContent)
+      this._database.data = this.data.fileContent;
+  }
 
   getLevel = (node: ItemFlatNode) => node.level;
 
