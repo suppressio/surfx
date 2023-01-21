@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { MatDrawer } from '@angular/material/sidenav';
 import { FileData } from '../model/models';
+import { CoreService } from '../services/core.service';
 import { FileIOService } from '../services/file-io.service';
 
 @Component({
@@ -8,19 +10,26 @@ import { FileIOService } from '../services/file-io.service';
   styleUrls: ['./core.component.scss']
 })
 export class CoreComponent implements OnInit{
+  @ViewChild('drawer', { static: true }) private drawer!: MatDrawer;
+  @ViewChild('fileInput', { static: true }) private fileInputElem!: ElementRef;
+
   data: FileData;
 
   private fileReader = new FileReader();
 
   constructor(
-    public fileSelect: FileIOService,
+    private fileSelect: FileIOService,
+    private coreService: CoreService
     ) {
       this.data = {fileContent:undefined,fileName:undefined};
     }
   
   ngOnInit(): void {
-      this.fileSelect.getXmlFileObs().subscribe(
-        (data:FileData) => this.data = data);
+    this.fileSelect.getXmlFileObs().subscribe(
+      (data:FileData) => this.data = data);
+
+    this.coreService.setDrawer(this.drawer);
+    this.coreService.setFileInput(this.fileInputElem);
   }
 
   onSelectedFile(fileInput: HTMLInputElement): void{

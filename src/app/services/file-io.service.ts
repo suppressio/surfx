@@ -17,15 +17,6 @@ export class FileIOService{
 
   constructor(){ }
 
-  // public openDialog(): void {
-  //   const config: MatDialogConfig = {
-  //     width: '300px',
-  //     data: {file: this.xmlFileTx},
-  //   };
-
-  //   this.dialog.open(FileDialogComponent, config);
-  // }
-
   getXmlFileObs(): BehaviorSubject<FileData>{
     return this.xmlFileObs;
   }

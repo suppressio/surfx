@@ -1,0 +1,63 @@
+<div class="menu-buttons">
+    <span style="border-left: solid 1px #ccc;"></span>
+    <button mat-button (click)="toggleSideBar()" [disabled]="isDataLoaded"><mat-icon style="rotate: 180deg;">view_sidebar</mat-icon></button>
+
+    <span style="border-left: solid 1px #ccc;"></span>
+    <button mat-button [matMenuTriggerFor]="fileMenu"><mat-icon>insert_drive_file</mat-icon> File</button>
+  
+    <span style="border-left: solid 1px #ccc;"></span>
+    <button mat-button [matMenuTriggerFor]="config" disabled><mat-icon>edit</mat-icon> Edit</button>
+  
+    <span style="border-left: solid 1px #ccc;"></span>
+    <button mat-button [matMenuTriggerFor]="config" disabled><mat-icon>settings</mat-icon> Settings</button>
+  
+    <span style="border-left: solid 1px #ccc;"></span>
+    <button mat-button [matMenuTriggerFor]="export" disabled><mat-icon>save_alt</mat-icon> Expot</button>
+  
+    <mat-menu #fileMenu="matMenu" style="position: absolute; top:20px; right:0px;">
+        <button mat-menu-item (click)="none()" disabled=""><mat-icon>add</mat-icon> New</button>
+        <button mat-menu-item (click)="selectFile()"><mat-icon>upload_file</mat-icon> Open file...</button>
+        <mat-divider></mat-divider>
+        <button mat-menu-item (click)="none()" disabled=""><mat-icon>save</mat-icon> Save</button>
+        <button mat-menu-item (click)="none()" disabled=""><mat-icon>save_as</mat-icon> Save as...</button>
+        <mat-divider></mat-divider>
+        <button mat-menu-item (click)="none()" disabled=""><mat-icon>exit_to_app</mat-icon> Quit</button>
+    </mat-menu>
+    
+    <mat-menu #config="matMenu">
+        <button mat-menu-item [matMenuTriggerFor]="stato"><i i-bs name="stickies" style="vertical-align: baseline;"></i> Stato</button>
+        <mat-divider></mat-divider>
+        <button mat-menu-item (click)="none()"><i i-bs name="eraser"></i> Reset griglia</button>
+    </mat-menu>
+    
+    <mat-menu #export="matMenu">
+      <button mat-menu-item (click)="none()" disabled><mat-icon>csv</mat-icon> CSV (.csv)</button>
+      <button mat-menu-item (click)="none()" disabled><mat-icon>excel</mat-icon> Excel (.xcl)</button>
+      <button mat-menu-item disabled><mat-icon>pdf</mat-icon>Pdf (.pdf)</button>
+    </mat-menu>
+  
+    <mat-menu #stato="matMenu">
+      <button mat-menu-item [matMenuTriggerFor]="saves"><i i-bs name="save2"></i> Salva griglia</button>
+      <button mat-menu-item [matMenuTriggerFor]="restores"><i i-bs name="chevron-bar-left"></i> Ripristina griglia</button>
+    </mat-menu>
+  
+    <mat-menu #saves="matMenu">
+      <button mat-menu-item (click)="none()"><mat-icon>patch-check</mat-icon> Default</button>
+      <mat-divider></mat-divider>
+      <button mat-menu-item disabled><mat-icon>asterisk</mat-icon> Nuovo salvataggio</button>
+    </mat-menu>
+  
+    <mat-menu #restores="matMenu">
+      <button mat-menu-item (click)="none()"><mat-icon>patch-check</mat-icon> Default</button>
+    </mat-menu>
+  
+    <span style="border-left: solid 1px #ccc;"></span>
+  
+    <!-- space -->
+  
+    <div style="display: inline-block; position: absolute; right: 0px;">
+      <span style="border-left: solid 1px #ccc;"></span>
+      <button mat-button (click)="none()" disabled><mat-icon>help_outline</mat-icon></button>
+    </div>
+  </div>
+  <hr style="margin:0; border: none; background-color: lightgrey; height: 1px;"/>

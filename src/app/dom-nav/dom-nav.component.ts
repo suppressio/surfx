@@ -1,81 +1,18 @@
 import { SelectionModel } from '@angular/cdk/collections';
 import { FlatTreeControl } from '@angular/cdk/tree';
-import { Component, Injectable, OnInit, OnDestroy, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree';
-import { BehaviorSubject, Subscription } from 'rxjs';
-import { environment } from 'src/environments/environment';
+import { Subscription } from 'rxjs';
 import { FileData, ItemFlatNode, ItemNode } from '../model/models';
+import { DomTreeDatabase } from '../services/dom-tree-db.service';
 
-/**
- * Checklist database, it can build a tree structured Json object.
- * Each node in Json object represents a item or a category.
- * If a node is a category, it has children items and new items can be added under the category.
- */
-@Injectable()
-export class ChecklistDatabase {
-  dataChange = new BehaviorSubject<ItemNode[]>([]);
 
-  get data(): ItemNode[] {
-    return this.dataChange.value;
-  }
-
-  set data(newData: ItemNode[]){
-    this.initialize(newData, 0);
-  }
-
-  constructor() { }
-
-  initialize(obj: {[key: string]: any}, level: number) {
-    // Build the tree nodes from Json object. 
-    // The result is a list of `TodoItemNode` with nested file node as children.
-    const data = this.buildFileTree(obj, level);
-
-    // Notify the change.
-    this.dataChange.next(data);
-  }
-
-  /** Build the file structure tree. The `value` is the Json object, or a sub-tree of a Json object.
-   * The return value is the list of `TodoItemNode`. */
-  buildFileTree(obj: {[key: string]: any}, level: number): ItemNode[] {
-    return Object.keys(obj).reduce<ItemNode[]>((accumulator, key) => {
-      const value = obj[key];
-      const node = new ItemNode();
-      node.item = key;
-
-      if (value != null) {
-        if (typeof value === 'object') {
-          node.children = this.buildFileTree(value, level + 1);
-        } else {
-          node.item = value;
-        }
-      }
-
-      return accumulator.concat(node);
-    }, []);
-  }
-
-  /** Add an item to to-do list */
-  insertItem(parent: ItemNode, name: string) {
-    if (parent.children) {
-      parent.children.push({item: name} as ItemNode);
-      this.dataChange.next(this.data);
-    }
-  }
-
-  updateItem(node: ItemNode, name: string) {
-    node.item = name;
-    this.dataChange.next(this.data);
-  }
-}
-
-/**
- * @title Tree with checkboxes
- */
+/** @title Dom Tree Navigator */
 @Component({
   selector: 'app-dom-nav',
   templateUrl: './dom-nav.component.html',
   styleUrls: ['./dom-nav.component.scss'],
-  providers: [ChecklistDatabase],
+  providers: [DomTreeDatabase],
 })
 export class DomNavComponent implements OnInit, OnChanges, OnDestroy {
   @Input() data: FileData;
@@ -101,7 +38,7 @@ export class DomNavComponent implements OnInit, OnChanges, OnDestroy {
   checklistSelection = new SelectionModel<ItemFlatNode>(true /* multiple */);
 
   constructor(
-    private _database: ChecklistDatabase
+    private _database: DomTreeDatabase
     ) {
       this.treeFlattener = new MatTreeFlattener(
         this.transformer,
@@ -123,7 +60,7 @@ export class DomNavComponent implements OnInit, OnChanges, OnDestroy {
   ngOnInit(): void { }
 
   ngOnChanges(changes: SimpleChanges): void {
-    console.log("dom-nav", this.data);
+    // console.debug("dom-nav", this.data);
     if (this.data.fileContent)
       this._database.data = this.data.fileContent;
   }
@@ -203,30 +140,25 @@ export class DomNavComponent implements OnInit, OnChanges, OnDestroy {
     const descendants = this.treeControl.getDescendants(node);
     const descAllSelected =
       descendants.length > 0 &&
-      descendants.every(child => {
-        return this.checklistSelection.isSelected(child);
-      });
-    if (nodeSelected && !descAllSelected) {
+      descendants.every(child => this.checklistSelection.isSelected(child));
+    if (nodeSelected && !descAllSelected)
       this.checklistSelection.deselect(node);
-    } else if (!nodeSelected && descAllSelected) {
+    else if (!nodeSelected && descAllSelected) 
       this.checklistSelection.select(node);
-    }
   }
 
   /* Get the parent node of a node */
   getParentNode(node: ItemFlatNode): ItemFlatNode | null {
     const currentLevel = this.getLevel(node);
 
-    if (currentLevel < 1) 
-      return null;
+    if (currentLevel < 1) return null;
 
     const startIndex = this.treeControl.dataNodes.indexOf(node) - 1;
     for (let i = startIndex; i >= 0; i--) {
       const currentNode = this.treeControl.dataNodes[i];
 
-      if (this.getLevel(currentNode) < currentLevel) {
+      if (this.getLevel(currentNode) < currentLevel) 
         return currentNode;
-      }
     }
     return null;
   }
