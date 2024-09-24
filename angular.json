@@ -73,10 +73,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "surfx:build:production"
+              "buildTarget": "surfx:build:production"
             },
             "development": {
-              "browserTarget": "surfx:build:development"
+              "buildTarget": "surfx:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -84,7 +84,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "surfx:build"
+            "buildTarget": "surfx:build"
           }
         },
         "test": {
@@ -108,6 +108,5 @@
         }
       }
     }
-  },
-  "defaultProject": "surfx"
+  }
 }
