@@ -25,22 +25,26 @@ export class CoreComponent implements OnInit{
     }
   
   ngOnInit(): void {
-    this.fileSelect.getXmlFileObs().subscribe(
+    this.fileSelect.getFileObs().subscribe(
       (data:FileData) => this.data = data);
 
     this.coreService.setDrawer(this.drawer);
     this.coreService.setFileInput(this.fileInputElem);
   }
 
-  onSelectedFile(fileInput: HTMLInputElement): void{
+  onSelectedFile(fileInput: HTMLInputElement): void {
     const file = fileInput.files?.item(0);
-    const fileName = fileInput.files?.item(0)?.name;
+    const fileName = file?.name;
 
-    if(file && fileName && this.validateXmlFileExt(fileName))
-      this.readXmlFile(file, fileName);
+    if (file && fileName) {
+      if (this.validateXmlFileExt(fileName))
+        this.readXmlFile(file, fileName);
+      else
+        console.warn("Invalid file extension, file not readed.");
+    }
   }
 
-  private readXmlFile(file:File, fileName:string): void{
+  private readXmlFile(file:File, fileName:string): void {
     this.fileReader.readAsArrayBuffer(file);
 
     this.fileReader.onload = () => {
@@ -57,7 +61,7 @@ export class CoreComponent implements OnInit{
     }
   }
 
-  private validateXmlFileExt(name: String|undefined): boolean{
+  private validateXmlFileExt(name: String|undefined): boolean {
     return name? (name.substring(name.lastIndexOf('.')+1).toLowerCase() == 'xml'): false;
   }
 
@@ -71,7 +75,7 @@ export class CoreComponent implements OnInit{
 
   // TODO
   private loadJson(): any {
-    throw new Error("Unimplemented");
+    throw new Error("Not implemented");
   }
 
   // TODO

@@ -18,7 +18,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatTableModule } from '@angular/material/table';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatDividerModule } from '@angular/material/divider';
-import { FileDialogComponent } from './file-dialog/file-dialog.component';
+// import { FileDialogComponent } from './file-dialog/file-dialog.component';
 import { CoreComponent } from './core/core.component';
 
 import { FileIOService } from './services/file-io.service';
@@ -30,7 +30,7 @@ import { MenuComponent } from './menu/menu.component';
     AppComponent,
     DomNavComponent,
     MainGridComponent,
-    FileDialogComponent,
+    // FileDialogComponent,
     CoreComponent,
     MenuComponent
   ],

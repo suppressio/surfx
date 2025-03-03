@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { CoreService } from '../services/core.service';
 
 @Component({
@@ -6,26 +6,26 @@ import { CoreService } from '../services/core.service';
   templateUrl: './menu.component.html',
   styleUrls: ['./menu.component.scss']
 })
-export class MenuComponent implements OnInit {
-  isDataLoaded:boolean=false;
+export class MenuComponent {
+  isDataLoaded: boolean = false;
 
   constructor(
-    private coreService:CoreService
+    private coreService: CoreService
   ) { }
 
-  ngOnInit(): void {
+  none(): void {
+    throw new Error("Not implemented");
   }
 
-  none():void {}
-
-  toggleSideBar(){
+  toggleSideBar(): void {
     this.coreService.toggle();
   }
-  
-  selectFile(){
+
+  selectFile(): void {
     this.coreService.selectFile();
   }
 
-  private init_isDataLoaded(){
+  private init_isDataLoaded(): void {
+    throw new Error("Not implemented");
   }
 }

@@ -2,6 +2,8 @@
 export interface FileData {
     fileContent: any|undefined,
     fileName: string|undefined,
+    isXml?: true;
+    isJson?: true;
     error?: string
 }
 

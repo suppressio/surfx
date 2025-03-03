@@ -17,9 +17,10 @@ export class MainGridComponent implements OnInit, OnChanges{
     this.dataSource = undefined;
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   ngOnChanges(changes: SimpleChanges): void {
+    console.log("[MainGridComponent] ngOnChanges");
     // this.flush();
     if (this.data)
       this.initData(this.data.fileContent);
@@ -52,7 +53,7 @@ export class MainGridComponent implements OnInit, OnChanges{
       );
   }
 
-  private displayRows(data:any):void{
+  private displayRows(data:any): void {
     if (data instanceof Array) {
       this.dataSource = data;
     }
@@ -61,7 +62,7 @@ export class MainGridComponent implements OnInit, OnChanges{
       Object.keys(data).forEach(k=>
           rtnObj[k] = "[...]"
         );
-      console.log(rtnObj);
+      console.log("[MainGridComponent] displayRows:", {rtnObj});
       this.dataSource = [rtnObj];
     }
   }

@@ -3,6 +3,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FileData } from '../model/models';
 import { FileIOService } from '../services/file-io.service';
 
+/** @deprecated */
 @Component({
   selector: 'app-file-dialog',
   templateUrl: './file-dialog.component.html',
@@ -24,8 +25,12 @@ export class FileDialogComponent {
     this.file = fileInput.files?.item(0);
     this.fileName = fileInput.files?.item(0)?.name;
 
-    if(this.file && this.validateXmlFileExt(this.fileName))
-      this.readXmlFile(this.file);
+    if (this.file) {
+      if (this.validateXmlFileExt(this.fileName))
+        this.readXmlFile(this.file);
+      else
+        console.warn("Invalid file extension, file not readed.");
+    }
   }
 
   private readXmlFile(file:File): void{
