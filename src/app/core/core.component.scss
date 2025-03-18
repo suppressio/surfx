@@ -17,8 +17,29 @@
     min-width: 180px;
 }
 
-button.toggle-sidenav{
-    position:absolute;
+button.toggle-sidenav {
+    position: absolute;
     top: 3px;
     left: 5px;
+}
+
+.file-input-hidden {
+    display: none;
+}
+
+.sidenav-title {
+    vertical-align: middle;
+    padding-right: 6px;
+}
+
+hr.sidenav-separator {
+    margin: 0;
+    border: none;
+    background-color: lightgrey;
+    height: 1px;
+}
+
+.main-grid {
+    width: 100%;
+    height: 100%;
 }

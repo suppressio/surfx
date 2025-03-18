@@ -1,21 +1,21 @@
 <input #fileInput type="file" 
-  style="display: none;" 
+  class="file-input-hidden"
   (change)="onSelectedFile(fileInput)">
 
 <mat-drawer-container class="container" autosize>
   <app-menu></app-menu>
     
   <mat-drawer #drawer class="sidenav mat-elevation-z5" mode="side">
-    <p><mat-icon style="vertical-align: middle; padding-right: 6px;">near_me</mat-icon>DOM navigation</p>
+    <p><mat-icon class="sidenav-title">near_me</mat-icon>DOM navigation</p>
 
-    <hr style="margin:0; border: none; background-color: lightgrey; height: 1px;"/>
+    <hr class="sidenav-separator"/>
     
     <app-dom-nav [data]="data"></app-dom-nav>
   </mat-drawer>
 
   <div class="sidenav-main-content">
     <app-main-grid 
-      style="width:100%; height: 100%;"
+      class="main-grid"
       [data]="data">
     </app-main-grid>
   </div>

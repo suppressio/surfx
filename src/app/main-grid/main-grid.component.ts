@@ -6,7 +6,7 @@ import { FileData } from '../model/models';
   templateUrl: './main-grid.component.html',
   styleUrls: ['./main-grid.component.scss']
 })
-export class MainGridComponent implements OnInit, OnChanges{
+export class MainGridComponent implements OnChanges{
   @Input() data: FileData;
   displayedColumns: string[];
   dataSource:any;
@@ -17,8 +17,6 @@ export class MainGridComponent implements OnInit, OnChanges{
     this.dataSource = undefined;
   }
 
-  ngOnInit(): void {}
-
   ngOnChanges(changes: SimpleChanges): void {
     console.log("[MainGridComponent] ngOnChanges");
     // this.flush();
@@ -26,20 +24,20 @@ export class MainGridComponent implements OnInit, OnChanges{
       this.initData(this.data.fileContent);
   }
 
-  private flushData(){
+  private flushData(): void {
     this.data = {fileContent:undefined,fileName:undefined};
     this.displayedColumns = [];
     this.dataSource = undefined;
   }
 
-  private initData(data:any){
+  private initData(data:any): void {
     if (data) {
       this.displayColums(data);
       this.displayRows(data);
     }
   }
 
-  private displayColums(data:any){
+  private displayColums(data:any): void {
     if (data instanceof Array)
       data.forEach((d:any)=>{
         Object.keys(d).forEach(k=>{

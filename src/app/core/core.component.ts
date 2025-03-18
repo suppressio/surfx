@@ -1,21 +1,24 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatDrawer } from '@angular/material/sidenav';
 import { FileData } from '../model/models';
 import { CoreService } from '../services/core.service';
 import { FileIOService } from '../services/file-io.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-core',
   templateUrl: './core.component.html',
   styleUrls: ['./core.component.scss']
 })
-export class CoreComponent implements OnInit{
+export class CoreComponent implements OnInit, OnDestroy{
   @ViewChild('drawer', { static: true }) private drawer!: MatDrawer;
   @ViewChild('fileInput', { static: true }) private fileInputElem!: ElementRef;
 
   data: FileData;
 
   private fileReader = new FileReader();
+
+  private subs = new Subscription();
 
   constructor(
     private fileSelect: FileIOService,
@@ -25,8 +28,12 @@ export class CoreComponent implements OnInit{
     }
   
   ngOnInit(): void {
-    this.fileSelect.getFileObs().subscribe(
-      (data:FileData) => this.data = data);
+    this.subs.add(
+      this.fileSelect
+        .getFileObs()
+        .subscribe(
+        (data:FileData) => 
+          this.data = data));
 
     this.coreService.setDrawer(this.drawer);
     this.coreService.setFileInput(this.fileInputElem);
@@ -79,7 +86,7 @@ export class CoreComponent implements OnInit{
   }
 
   // TODO
-  private modelXml(xml:any) {
+  private modelXml(xml:any): any {
     if (xml && xml.settings.menu.menuGroup.length) {
       const menuElems = xml.settings.menu.menuGroup.map(
         (data:any) => {
@@ -88,5 +95,9 @@ export class CoreComponent implements OnInit{
       });
     }
     return xml;
+  }
+  
+  ngOnDestroy(): void {
+    this.subs.unsubscribe();
   }
 }

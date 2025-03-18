@@ -9,9 +9,7 @@ export class CoreService{
   private fileInput: ElementRef | undefined;
   private data: FileData | undefined;
 
-  constructor(){ }
-
-  setDrawer(drawer: MatDrawer):void {
+  setDrawer(drawer: MatDrawer): void {
     this.drawer = drawer;
   }
   

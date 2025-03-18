@@ -1,7 +1,7 @@
-.menu-buttons{
+.menu-buttons {
     height: 24px;
     align-self: bottom;
-    
+
     button.mat-mdc-button {
         display: inline-block;
         // line-height: 24px;
@@ -9,8 +9,31 @@
         font-weight: lighter;
         font-size: small;
 
-        ::ng-deep mat-icon{
+        ::ng-deep mat-icon {
             vertical-align: top !important;
         }
     }
+
+    .buttons-right {
+        display: inline-block;
+        position: absolute;
+        right: 0px;
+    }
+
+    .button-separator-left {
+        border-left: solid 1px #ccc;
+    }
+
+    .dropdown-menu {
+        position: absolute;
+        top: 20px;
+        right: 0px;
+    }
+}
+
+.menu-separator {
+    margin: 0;
+    border: none;
+    background-color: lightgrey;
+    height: 1px;
 }

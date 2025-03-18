@@ -19,8 +19,8 @@ export class FileIOService {
     return this._fileObs.asObservable();
   }
 
-  //#region xml
-  setXmlFile(xmlFileTx: FileData) {
+//#region xml
+  setXmlFile(xmlFileTx: FileData): void {
     this._fileObs.next(xmlFileTx);
   }
 
@@ -38,9 +38,9 @@ export class FileIOService {
     }
     return undefined;
   }
-  //#endregion
+//#endregion
 
-  //#region json
+//#region json
   parseJson(fromFile: string | undefined): true | string | undefined {
     throw new Error("TODO: not implemented");
   }
@@ -48,5 +48,5 @@ export class FileIOService {
   validateJson(fromFile: string | undefined): true | string | undefined {
     throw new Error("TODO: not implemented");
   }
-  //#endregion
+//#endregion
 }
