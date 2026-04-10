@@ -9,10 +9,11 @@ import { DomTreeDatabase } from '../services/dom-tree-db.service';
 
 /** @title Dom Tree Navigator */
 @Component({
-  selector: 'app-dom-nav',
-  templateUrl: './dom-nav.component.html',
-  styleUrls: ['./dom-nav.component.scss'],
-  providers: [DomTreeDatabase],
+    selector: 'app-dom-nav',
+    templateUrl: './dom-nav.component.html',
+    styleUrls: ['./dom-nav.component.scss'],
+    providers: [DomTreeDatabase],
+    standalone: false
 })
 export class DomNavComponent implements OnInit, OnChanges, OnDestroy {
   @Input() data: FileData;

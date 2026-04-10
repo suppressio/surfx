@@ -2,9 +2,10 @@ import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/cor
 import { FileData } from '../model/models';
 
 @Component({
-  selector: 'app-main-grid',
-  templateUrl: './main-grid.component.html',
-  styleUrls: ['./main-grid.component.scss']
+    selector: 'app-main-grid',
+    templateUrl: './main-grid.component.html',
+    styleUrls: ['./main-grid.component.scss'],
+    standalone: false
 })
 export class MainGridComponent implements OnChanges{
   @Input() data: FileData;

@@ -6,9 +6,10 @@ import { FileIOService } from '../services/file-io.service';
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-core',
-  templateUrl: './core.component.html',
-  styleUrls: ['./core.component.scss']
+    selector: 'app-core',
+    templateUrl: './core.component.html',
+    styleUrls: ['./core.component.scss'],
+    standalone: false
 })
 export class CoreComponent implements OnInit, OnDestroy{
   @ViewChild('drawer', { static: true }) private drawer!: MatDrawer;
