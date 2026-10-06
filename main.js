@@ -3,18 +3,15 @@ const path = require('path');
 const url = require("url");
 
 function createWindow() {
-    const win = new BrowserWindow({
+    let win = new BrowserWindow({
         width: 800,
-        height: 600,
-        webPreferences: {
-            preload: path.join(__dirname, 'preload.js')
-        }
+        height: 600
     });
 
     //   win.loadFile('/dist/surfx/index.html')
     win.loadURL(
         url.format({
-            pathname: path.join(__dirname, "/dist/surfx/index.html"),
+            pathname: path.join(__dirname, "/dist/surfx/browser/index.html"),
             protocol: "file:",
             slashes: true
         })
