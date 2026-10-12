@@ -1,27 +1,38 @@
+🌐 **English** | [Italiano](README.it.md)
+
 # Surfx
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 13.2.3.
+A desktop app (Angular + Electron) to open an XML file and browse it: the structure as a tree in the side panel, the elements in a table.
 
-## Development server
+> **Early prototype.** Today it opens and shows XML files. JSON, editing, saving and export (CSV, Excel, PDF) are in the menus but not implemented yet: they are greyed out.
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+## Run
 
-## Code scaffolding
+You need [Node.js](https://nodejs.org) 20.19 or later.
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+```bash
+npm install
+npm run electron    # builds the app and opens it in an Electron window
+```
 
-## Build
+`npm start` runs it in the browser instead, on http://localhost:4200 (Angular development server).
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+Then **File → Open file...** and pick an XML file. `src/assets/test.config.xml` is a sample: the menu configuration of [luma_oled_menu](https://github.com/suppressio/luma_oled_menu).
 
-## Running unit tests
+## Development
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+```bash
+npm run build    # Angular build in dist/surfx/
+npm test         # unit tests (Karma)
+```
 
-## Running end-to-end tests
+| Path | What |
+|---|---|
+| `main.js` | Electron main process: opens a window on `dist/surfx/browser/index.html` |
+| `src/app/menu/` | top menu bar (File, Edit, Settings, Export) |
+| `src/app/dom-nav/` | tree view of the file in the side panel |
+| `src/app/main-grid/` | table of the elements |
+| `src/app/services/file-io.service.ts` | file reading and XML parsing (`fast-xml-parser`); JSON is a stub |
+| `src/app/services/dom-tree-db.service.ts` | turns the parsed object into tree nodes |
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+`app.js` is an older Electron entry point, no longer used (`package.json` points to `main.js`).
